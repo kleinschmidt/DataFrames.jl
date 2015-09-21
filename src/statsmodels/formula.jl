@@ -376,7 +376,7 @@ function coefnames(mf::ModelFrame)
 
     # For each _term_, pull out a vector of individual evaluation termnames that
     # go into it.
-    tnames = Vector{Vector{Any}}()
+    tnames = Vector{Any}[]
     if mf.terms.intercept
         push!(tnames, push!([], ["(Intercept)"]))
     end
