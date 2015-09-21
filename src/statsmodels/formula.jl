@@ -378,7 +378,7 @@ function coefnames(mf::ModelFrame)
     # go into it.
     tnames = Vector{Any}[]
     if mf.terms.intercept
-        push!(tnames, push!([], ["(Intercept)"]))
+        push!(tnames, push!(Any[], ["(Intercept)"]))
     end
     for term in mf.terms.terms
         if isa(term, Expr)
@@ -391,7 +391,7 @@ function coefnames(mf::ModelFrame)
             end
         else
             # for "main effect" terms, push length-1 vector which holds all
-            push!(tnames, push!([], etnames[term]))
+            push!(tnames, push!(Any[], etnames[term]))
         end
     end
 
