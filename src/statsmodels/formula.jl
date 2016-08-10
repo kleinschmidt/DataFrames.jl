@@ -296,9 +296,7 @@ function ModelFrame(trms::Terms, d::AbstractDataFrame;
     evaledContrasts = Dict()
     for (term, col) in eachcol(df)
         is_categorical(col) || continue
-        evaledContrasts[term] = ContrastsMatrix(haskey(contrasts, term) ?
-                                                contrasts[term] :
-                                                DEFAULT_CONTRASTS(),
+        evaledContrasts[term] = ContrastsMatrix(get(DEFAULT_CONTRASTS, contrasts, term),
                                                 col)
     end
 
@@ -464,10 +462,8 @@ function ModelMatrix(mf::ModelFrame)
         ## Get cols for each eval term (either previously generated, or generating
         ## and storing as necessary)
         for (et, nr) in zip(eterms, non_redundants)
-            if ! haskey(eterm_cols, (et, nr))
-                eterm_cols[(et, nr)] = modelmat_cols(et, mf, non_redundant=nr)
-            end
-            push!(term_cols, eterm_cols[(et, nr)])
+            col = get!(eterm_cols, (et, nr), modelmat_cols(et, mf, non_redundant=nr))
+            push!(term_cols, col)
         end
         push!(blocks, expandcols(term_cols))
         append!(assign, fill(i_term, size(blocks[end], 2)))
